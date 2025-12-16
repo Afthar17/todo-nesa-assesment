@@ -7,13 +7,14 @@ import { useTodoStore } from "../store/useTodoStore";
 const DashBoardPage = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState(null);
+  const [page, setPage] = useState(1);
 
-  const { todos, loading, getTodos, createTodo, updateTodo, deleteTodo } =
+  const { todos, loading, getTodos, createTodo, updateTodo, deleteTodo, meta } =
     useTodoStore();
 
   useEffect(() => {
-    getTodos();
-  }, [getTodos]);
+    getTodos({ page, limit: 6 });
+  }, [getTodos, page]);
 
   const handleSubmit = async (formValues) => {
     if (selectedTodo) {
@@ -80,6 +81,29 @@ const DashBoardPage = () => {
           }}
           onSubmit={handleSubmit}
         />
+      )}
+      {meta.totalPages > 1 && (
+        <div className="mt-10 flex justify-center gap-2">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage((p) => p - 1)}
+            className="rounded-full border px-4 py-1.5 text-sm disabled:opacity-40"
+          >
+            Prev
+          </button>
+
+          <span className="text-sm text-slate-600 flex items-center">
+            Page {meta.page} of {meta.totalPages}
+          </span>
+
+          <button
+            disabled={page === meta.totalPages}
+            onClick={() => setPage((p) => p + 1)}
+            className="rounded-full border px-4 py-1.5 text-sm disabled:opacity-40"
+          >
+            Next
+          </button>
+        </div>
       )}
     </div>
   );

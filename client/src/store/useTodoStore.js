@@ -5,12 +5,24 @@ import { toast } from "react-hot-toast";
 export const useTodoStore = create((set, get) => ({
   todos: [],
   loading: false,
+  meta: {
+    page: 1,
+    totalPages: 1,
+  },
 
-  getTodos: async () => {
+  getTodos: async ({ page = 1, limit = 6 } = {}) => {
     try {
       set({ loading: true });
-      const res = await axios.get("/todos");
-      set({ todos: res.data, loading: false });
+
+      const res = await axios.get("/todos", {
+        params: { page, limit },
+      });
+
+      set({
+        todos: res.data.data,
+        meta: res.data.meta,
+        loading: false,
+      });
     } catch (error) {
       set({ loading: false });
       toast.error(error.response?.data?.message || "Failed to load todos");

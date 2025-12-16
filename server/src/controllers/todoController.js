@@ -3,16 +3,34 @@ import Todo from "../models/todoModel.js";
 export const getTodos = async (req, res) => {
   try {
     const userId = req.user._id;
-    const todos = await Todo.find({ user: userId });
-    if (!todos) {
-      return res.status(400).json({ message: "No todos found" });
-    }
-    res.status(200).json(todos);
+
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+    const limit = Math.min(parseInt(req.query.limit) || 6, 50);
+    const skip = (page - 1) * limit;
+
+    const [todos, total] = await Promise.all([
+      Todo.find({ user: userId })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      Todo.countDocuments({ user: userId }),
+    ]);
+
+    res.status(200).json({
+      data: todos,
+      meta: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
     console.error(error);
+    res.status(500).json({ message: "Server Error" });
   }
 };
+
 export const addTodo = async (req, res) => {
   try {
     const userId = req.user._id;
