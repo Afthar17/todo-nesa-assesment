@@ -30,7 +30,7 @@ const SignUpPage = () => {
     signUp(formData);
   };
   return (
-    <div className="flex flex-col justify-center py-10 sm:px-6 lg:px-8 space-y-4 bg-white">
+    <div className="flex flex-col justify-center py-10 sm:px-6 mt-5 lg:px-8 space-y-4 bg-white">
       <motion.div
         className="sm:mx-auto sm:w-full sm:max-w-md"
         initial={{ opacity: 0, y: -20 }}

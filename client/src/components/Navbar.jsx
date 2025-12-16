@@ -11,7 +11,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-[600px] px-4">
+    <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-150 px-4">
       <div
         className="backdrop-blur-xl bg-white/20 shadow-lg border border-white/30 
                    rounded-full px-6 py-2 flex items-center justify-between"
@@ -39,7 +39,10 @@ export default function Navbar() {
               <Link to="/login" className="hover:text-slate-600 transition">
                 Login
               </Link>
-              <Link to={"/signup"} className="hover:text-slate-600 transition">
+              <Link
+                to={"/register"}
+                className="hover:text-slate-600 transition"
+              >
                 Sign Up
               </Link>
             </>
@@ -60,10 +63,10 @@ export default function Navbar() {
                      rounded-xl p-4 text-slate-900 text-sm font-medium shadow-lg animate-fadeSlide"
         >
           <div className="flex flex-col gap-4">
-            {!user ? (
+            {user ? (
               <>
                 <Link
-                  to="/create"
+                  to="/"
                   onClick={() => setIsOpen(false)}
                   className="hover:text-slate-600 transition"
                 >
@@ -71,7 +74,7 @@ export default function Navbar() {
                 </Link>
 
                 <Link
-                  to="/dashboard"
+                  to="/"
                   onClick={() => setIsOpen(false)}
                   className="hover:text-slate-600 transition"
                 >

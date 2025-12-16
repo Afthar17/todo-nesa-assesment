@@ -32,8 +32,9 @@ export const useTodoStore = create((set, get) => ({
   createTodo: async (data) => {
     try {
       const res = await axios.post("/todos", data);
-      set({ todos: [...get().todos, res.data] });
+      get().getTodos({ page: get().meta.page, limit: 6 });
       toast.success("Todo added");
+      return res.data;
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add todo");
     }
@@ -54,9 +55,7 @@ export const useTodoStore = create((set, get) => ({
   deleteTodo: async (id) => {
     try {
       await axios.delete(`/todos/${id}`);
-      set({
-        todos: get().todos.filter((todo) => todo._id !== id),
-      });
+      get().getTodos({ page: get().meta.page, limit: 6 });
       toast.success("Todo deleted");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to delete todo");
